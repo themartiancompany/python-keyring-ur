@@ -25,7 +25,7 @@ b2sums=('b1b955215bf197f52e64c46572f29c2059f75f5eadce249fe1776f10f7f1c6d20428a81
 build() {
   cd $_name-$pkgver
 
-  python -m build
+  python -m build --wheel --no-isolation
 }
 
 check() {
