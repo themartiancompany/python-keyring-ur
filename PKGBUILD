@@ -15,7 +15,7 @@ url='https://github.com/jaraco/keyring'
 license=('PSF-2.0' 'MIT')
 depends=('python-jaraco.classes' 'python-secretstorage' 'python-jaraco.functools' 'python-jaraco.context')
 makedepends=('python-build' 'python-installer' 'python-setuptools-scm' 'python-wheel')
-checkdepends=('python-pytest-flake8' 'python-pytest' 'python-pytest-black' 'python-pytest-cov' 'python-pytest-mypy')
+checkdepends=('python-pytest-flake8' 'python-pytest' 'python-pytest-black' 'python-pytest-mypy')
 optdepends=('python-keyrings-alt: Alternative backends'
             'python-dbus: kwallet backend')
 source=(https://files.pythonhosted.org/packages/source/${_name::1}/$_name/$_name-$pkgver.tar.gz)
