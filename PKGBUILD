@@ -8,7 +8,7 @@
 pkgname=python-keyring
 _name=keyring
 pkgver=25.0.0
-pkgrel=2
+pkgrel=3
 pkgdesc='Store and access your passwords safely'
 arch=('any')
 url='https://github.com/jaraco/keyring'
