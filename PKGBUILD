@@ -1,3 +1,7 @@
+# SPDX-License-Identifier: AGPL-3.0
+#
+# Maintainer: Truocolo <truocolo@aol.com>
+# Maintainer: Pellegrino Prevete (tallero) <pellegrinoprevete@gmail.com>
 # Maintainer: Filipe Laíns (FFY00) <lains@archlinux.org>
 # Contributor: Johannes Dewender  arch at JonnyJD dot net
 # Contributor: Ivan Sichmann Freitas <ivansichfreitas@gmail.com>
@@ -5,45 +9,95 @@
 # Contributor: Nuno Araujo <nuno.araujo at russo79.com>
 # Contributor: Steven Allen <steven {at} stebalien {dot} com>
 
-pkgname=python-keyring
+_py="python"
+_pkg=keyring
+pkgname="${_py}-${_pkg}"
 _name=keyring
 pkgver=25.2.1
 pkgrel=1
 pkgdesc='Store and access your passwords safely'
-arch=('any')
-url='https://github.com/jaraco/keyring'
-license=('PSF-2.0' 'MIT')
-depends=('python-jaraco.classes' 'python-secretstorage' 'python-jaraco.functools' 'python-jaraco.context')
-makedepends=('python-build' 'python-installer' 'python-setuptools-scm' 'python-wheel')
-checkdepends=('python-pytest')
-optdepends=('python-keyrings-alt: Alternative backends'
-            'python-dbus: kwallet backend')
-source=(https://files.pythonhosted.org/packages/source/${_name::1}/$_name/$_name-$pkgver.tar.gz)
-sha512sums=('4512c79a1f0c05cd5d28919f55f19c142488d69d9bf7a27e9d7b3aace36535cf43a4522a4ea4b4738f21c82a6980932bd9d1c7ae62592242c333161e791cdb2e')
-b2sums=('706eb0cb1cb5e7f22e603df3b2ab9c95421a389d5bec8034ac452d37e754564379d6133a195e7c7fcbb1f96a8f964e5de505a39dce1da72090daad01d144c213')
+arch=(
+  'any'
+)
+_http="https://github.com"
+_ns="jaraco"
+url="${_http}/${_ns}/${_pkg}"
+license=(
+  'PSF-2.0'
+  'MIT'
+)
+depends=(
+  'python-jaraco.classes'
+  'python-secretstorage'
+  'python-jaraco.functools'
+  'python-jaraco.context'
+)
+makedepends=(
+  'python-build'
+  'python-installer'
+  'python-setuptools-scm'
+  'python-wheel'
+)
+checkdepends=(
+  'python-pytest'
+)
+optdepends=(
+  'python-keyrings-alt: Alternative backends'
+  'python-dbus: kwallet backend'
+)
+source=(
+  https://files.pythonhosted.org/packages/source/${_name::1}/$_name/$_name-$pkgver.tar.gz
+)
+sha512sums=(
+  '4512c79a1f0c05cd5d28919f55f19c142488d69d9bf7a27e9d7b3aace36535cf43a4522a4ea4b4738f21c82a6980932bd9d1c7ae62592242c333161e791cdb2e'
+)
+b2sums=(
+  '706eb0cb1cb5e7f22e603df3b2ab9c95421a389d5bec8034ac452d37e754564379d6133a195e7c7fcbb1f96a8f964e5de505a39dce1da72090daad01d144c213'
+)
 
 build() {
-  cd $_name-$pkgver
-
-  python -m build --wheel --no-isolation
+  cd \
+    $_name-$pkgver
+  python \
+    -m \
+      build \
+    --wheel \
+    --no-isolation
 }
 
 check() {
-  cd $_name-$pkgver
-
-  rm tests/backends/test_{Windows,macOS}.py
-  python -m pytest \
-    --deselect tests/backends/test_chainer.py
+  cd \
+    $_name-$pkgver
+  rm \
+    tests/backends/test_{Windows,macOS}.py
+  python \
+    -m \
+      pytest \
+    --deselect \
+      tests/backends/test_chainer.py
 }
 
 package() {
-  cd $_name-$pkgver
-
-  python -m installer -d "$pkgdir" dist/*.whl
-  install -Dm 644 LICENSE "$pkgdir"/usr/share/licenses/$pkgname/LICENSE
-
-  local site_packages=$(python -c "import site; print(site.getsitepackages()[0])")
-  rm -rf "$pkgdir"/$site_packages/keyring/tests
+  cd \
+    $_name-$pkgver
+  python \
+    -m \
+      installer \
+    --destdir="${pkgdir}" \
+    dist/*.whl
+  install \
+    -Dm 644 \
+    LICENSE \
+    "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+  local \
+    site_packages=$( \
+      python \
+        -c \
+        "import site; print(site.getsitepackages()[0])")
+  rm \
+    -rf \
+    "${pkgdir}/${site_packages}/${_name}/tests"
 }
 
 # vim:set ts=2 sw=2 et:
+
