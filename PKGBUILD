@@ -1,8 +1,8 @@
 # SPDX-License-Identifier: AGPL-3.0
 #
-# Maintainer: Truocolo <truocolo@aol.com>
-# Maintainer: Pellegrino Prevete (tallero) <pellegrinoprevete@gmail.com>
-# Maintainer: Filipe Laíns (FFY00) <lains@archlinux.org>
+# Maintainer:  Truocolo <truocolo@aol.com>
+# Maintainer:  Pellegrino Prevete (tallero) <pellegrinoprevete@gmail.com>
+# Maintainer:  Filipe Laíns (FFY00) <lains@archlinux.org>
 # Contributor: Johannes Dewender  arch at JonnyJD dot net
 # Contributor: Ivan Sichmann Freitas <ivansichfreitas@gmail.com>
 # Contributor: Brice Maron <brice@bmaron.net>
@@ -10,9 +10,17 @@
 # Contributor: Steven Allen <steven {at} stebalien {dot} com>
 
 _py="python"
+_pyver="$( \
+  "${_py}" \
+    -V | \
+    awk \
+      '{print $2}')"
+_pymajver="${_pyver%.*}"
+_pyminver="${_pymajver#*.}"
+_pynextver="${_pymajver%.*}.$(( \
+  ${_pyminver} + 1))"
 _pkg=keyring
 pkgname="${_py}-${_pkg}"
-_name=keyring
 pkgver=25.2.1
 pkgrel=1
 pkgdesc='Store and access your passwords safely'
@@ -27,26 +35,29 @@ license=(
   'MIT'
 )
 depends=(
-  'python-jaraco.classes'
-  'python-secretstorage'
-  'python-jaraco.functools'
-  'python-jaraco.context'
+  "${_py}>=${_pymajver}"
+  "${_py}<${_pynextver}"
+  "${_py}-jaraco.classes"
+  "${_py}-secretstorage"
+  "${_py}-jaraco.functools"
+  "${_py}-jaraco.context"
 )
 makedepends=(
-  'python-build'
-  'python-installer'
-  'python-setuptools-scm'
-  'python-wheel'
+  "${_py}-build"
+  "${_py}-installer"
+  "${_py}-setuptools-scm"
+  "${_py}-wheel"
 )
 checkdepends=(
-  'python-pytest'
+  "${_py}-pytest"
 )
 optdepends=(
-  'python-keyrings-alt: Alternative backends'
-  'python-dbus: kwallet backend'
+  "${_py}-keyrings-alt: Alternative backends"
+  "${_py}-dbus: kwallet backend"
 )
+_pypa="https://files.pythonhosted.org/packages/source"
 source=(
-  https://files.pythonhosted.org/packages/source/${_name::1}/$_name/$_name-$pkgver.tar.gz
+  "${_pypa}/${_pkg::1}/${_pkg}/${_pkg}-${pkgver}.tar.gz"
 )
 sha512sums=(
   '4512c79a1f0c05cd5d28919f55f19c142488d69d9bf7a27e9d7b3aace36535cf43a4522a4ea4b4738f21c82a6980932bd9d1c7ae62592242c333161e791cdb2e'
@@ -57,8 +68,8 @@ b2sums=(
 
 build() {
   cd \
-    $_name-$pkgver
-  python \
+    "${_pkg}-${pkgver}"
+  "${_py}" \
     -m \
       build \
     --wheel \
@@ -67,10 +78,10 @@ build() {
 
 check() {
   cd \
-    $_name-$pkgver
+    "${_pkg}-${pkgver}"
   rm \
-    tests/backends/test_{Windows,macOS}.py
-  python \
+    "tests/backends/test_"{"Windows","macOS"}".py"
+  "${_py}" \
     -m \
       pytest \
     --deselect \
@@ -79,8 +90,8 @@ check() {
 
 package() {
   cd \
-    $_name-$pkgver
-  python \
+    "${_pkg}-${pkgver}"
+  "${_py}" \
     -m \
       installer \
     --destdir="${pkgdir}" \
@@ -100,4 +111,3 @@ package() {
 }
 
 # vim:set ts=2 sw=2 et:
-
